@@ -132,6 +132,13 @@ const menuOpen = ref(false)
       font-weight: bold;
       border-right: .125rem solid #fff2;
 
+      :deep(svg) {
+        display: inline-block;
+        vertical-align: middle;
+        width: 1.2em;
+        height: 1.2em;
+      }
+
       @media (max-width: 768px) {
         width: 100%;
         font-size: 1rem;

@@ -7,11 +7,11 @@
       <span>TIC TAC TOE</span>
     </h2>
     <div class="buttons">
-      <Textbox
+      <!-- <Textbox
         placeholder="Enter your name" 
         v-model="name"
         :error="nameError"
-      />
+      /> -->
 
       <div class="spacer"></div>
       
@@ -39,27 +39,26 @@
 import Btn from '../components/Btn.vue';
 import { ref } from 'vue';
 import Textbox from '../components/Textbox.vue';
-import { computed } from 'vue';
 import { useOnline } from '../store/online';
 
 const onlineGame = useOnline();
 
-const name = ref<string>('')
+// const name = ref<string>('')
 const code = ref<string>('')
 
-const nameError = computed(() => {
-  if (name.value.length === 0) return
+// const nameError = computed(() => {
+//   if (name.value.length === 0) return
 
-  if (name.value.trim().length < 3) {
-    return 'Name must be at least 3 characters long'
-  }
-  return ''
-})
+//   if (name.value.trim().length < 3) {
+//     return 'Name must be at least 3 characters long'
+//   }
+//   return ''
+// })
 
 function joinGame () {
-  if (nameError.value) return
+  // if (nameError.value) return
 
-  onlineGame.joinRoom(name.value, code.value)
+  onlineGame.joinRoom('', code.value)
 }
 </script>
 

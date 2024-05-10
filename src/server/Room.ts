@@ -44,6 +44,9 @@ export class Room {
           player: connectedClient.player
         }
       })
+      this.sendToClients({
+        type: 'playerReconnected',
+      })
 
       if (this.game) {
         this.sendToClients({
@@ -88,7 +91,7 @@ export class Room {
     client.res?.end()
 
     if (this.clients.length > 0 && this.game) {
-      this.sendToClients({ type: 'error', payload: 'Opponent disconnected' })
+      this.sendToClients({ type: 'playerDisconnected' })
     }
   }
 
@@ -136,7 +139,7 @@ export class Room {
   }
 
   sendToClients(data: {
-    type: 'joined' | 'state' | 'win' | 'draw' | 'error' ,
+    type: 'joined' | 'state' | 'win' | 'draw' | 'error' | 'playerDisconnected' | 'playerReconnected',
     payload?: any
   }) {
     this.clients.forEach(client => {
@@ -145,7 +148,7 @@ export class Room {
   }
 
   sendToClient(client: Client, data: {
-    type: 'joined' | 'state' | 'win' | 'draw' | 'error' ,
+    type: 'joined' | 'state' | 'win' | 'draw' | 'error' | 'playerDisconnected' | 'playerReconnected',
     payload?: any
   }) {
     client.res?.write(`data: ${JSON.stringify(data)}\n\n`)

@@ -8,6 +8,10 @@ export default defineConfig({
     vue(),
     VitePWA({
       registerType: 'autoUpdate',
+      manifest: {
+        name: 'Superultra TicTacToe',
+        theme_color: '#000000',
+      },
     }),
   ],
   server: {

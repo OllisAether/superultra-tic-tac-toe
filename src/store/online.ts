@@ -8,6 +8,7 @@ export interface GameSession {
   roomCode: string
   player: "x" | "o"
   clientId: string
+  opponentLeft?: boolean
   game?: {
     board: GlobalBoard
     currentPlayer: "x" | "o"
@@ -94,6 +95,20 @@ export const useOnline = defineStore('online', () => {
             }
 
             gameSession.value.game.winner = 'draw'
+            break
+          case 'playerDisconnected':
+            if (!gameSession.value) {
+              throw new Error('Game session not found')
+            }
+
+            gameSession.value.opponentLeft = true
+            break
+          case 'playerReconnected':
+            if (!gameSession.value) {
+              throw new Error('Game session not found')
+            }
+
+            gameSession.value.opponentLeft = false
             break
           default:
             console.log('Unknown event:', data)

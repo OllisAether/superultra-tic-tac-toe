@@ -11,9 +11,7 @@
     "preview": "vite preview",
     "serve": "npx tsx watch src/server/index.ts",
     "start": "node dist/server/index.js",
-    "deploy:server": "gcloud app deploy",
-    "deploy:client": "firebase deploy --only hosting",
-    "gcp-build": ""
+    "deploy": "firebase deploy --only hosting"
   },
   "dependencies": {
     "@types/cookie-parser": "^1.4.7",
