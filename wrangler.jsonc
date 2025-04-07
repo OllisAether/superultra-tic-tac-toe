@@ -1,0 +1,31 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "superultra-tic-tac-toe",
+  "compatibility_date": "2025-04-04",
+  "main": "server/index.ts",
+  "assets": {
+    "not_found_handling": "single-page-application",
+  },
+
+  "observability": {
+    "enabled": true
+  },
+
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "GAME_ROOM_MANAGER",
+        "class_name": "GameRoomManager"
+      }
+    ]
+  },
+
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_classes": [
+        "GameRoomManager"
+      ]
+    }
+  ]
+}

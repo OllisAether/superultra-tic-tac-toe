@@ -1,5 +1,5 @@
 <template>
-    <div class="game-layout__wrapper">
+  <div class="game-layout__wrapper">
     <div class="game-layout__info">
       <h2 class="game-layout__info__title">
         <slot name="title" />
@@ -33,10 +33,13 @@
         <ChevronIcon class="game-layout__info__menu-button__chevron-icon game-layout__info__menu-button__icon" />
       </button>
     </div>
-    <div :class="['game-layout__board', {
-      'game-layout__board--win': winner
-    }]">
-      <slot />
+    <div class="game-layout__board">
+      <div :class="['game-layout__board__content', {
+        'game-layout__board__content--win': winner,
+        'game-layout__board__content--player': showPlayer
+      }]">
+        <slot />
+      </div>
 
       <transition name="game-layout__win-overlay">
         <div v-if="winner" class="game-layout__win-overlay">
@@ -53,8 +56,27 @@
           </template>
 
           <Btn class="game-layout__win-overlay__reset-btn" @click="emit('restart')">
-            Start new game
+            <template v-if="isOnline">
+              Rematch ({{ rematch ? '1' : '0' }} / 2)
+            </template>
+            <template v-else>
+              Start new game
+            </template>
           </Btn>
+        </div>
+      </transition>
+
+      <transition name="game-layout__player-overlay">
+        <div v-if="showPlayer" class="game-layout__player-overlay">
+          <div>
+            You are
+          </div>
+          <template v-if="player === 'x'">
+            <XIcon :width="1" class="game-layout__player-overlay__player" />
+          </template>
+          <template v-else-if="player === 'o'">
+            <OIcon :width="1" class="game-layout__player-overlay__player" />
+          </template>
         </div>
       </transition>
     </div>
@@ -71,7 +93,10 @@ import { ref } from 'vue';
 
 defineProps<{
   menuItems: { title: string, click: () => void }[]
-  winner: 'x' | 'o' | 'draw' | null
+  winner: 'x' | 'o' | 'draw' | null,
+  player?: 'x' | 'o' | null,
+  isOnline?: boolean,
+  rematch?: 'x' | 'o' | null
 }>()
 
 const emit = defineEmits<{
@@ -79,6 +104,19 @@ const emit = defineEmits<{
 }>()
 
 const menuOpen = ref(false)
+
+const showPlayer = ref(false)
+
+function triggerPlayer () {
+  showPlayer.value = true
+  setTimeout(() => {
+    showPlayer.value = false
+  }, 1000)
+}
+
+defineExpose({
+  triggerPlayer
+})
 </script>
 
 
@@ -101,9 +139,13 @@ const menuOpen = ref(false)
     height: 100%;
     width: 100%;
 
-    &--win > :not(.game-layout__win-overlay) {
-      filter: blur(.25rem);
-      opacity: 0.5;
+    &__content {
+      transition: filter .3s, opacity .3s;
+
+      &--win, &--player {
+        filter: blur(.25rem);
+        opacity: 0.5;
+      }
     }
   }
 
@@ -158,6 +200,7 @@ const menuOpen = ref(false)
       overflow: auto;
 
       white-space: nowrap;
+      scrollbar-width: none;
 
       @media screen and (max-width: 768px) {
         padding: 0 1rem 1rem;
@@ -166,7 +209,6 @@ const menuOpen = ref(false)
         overflow: visible;
       }
 
-      scrollbar-width: none;
       &::-webkit-scrollbar {
         display: none;
       }
@@ -294,6 +336,31 @@ const menuOpen = ref(false)
       transition: .3s cubic-bezier(0.19, 1, 0.22, 1);
     }
 
+    &-enter-from, &-leave-to {
+      opacity: 0;
+      transform: scale(0.5);
+    }
+  }
+
+  &__player-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    text-align: center;
+
+    &__player {
+      width: 10rem;
+      height: 10rem;
+      margin-bottom: 2rem;
+    }
+
+    &-enter-active, &-leave-active {
+      transition: .3s cubic-bezier(0.19, 1, 0.22, 1);
+    }
     &-enter-from, &-leave-to {
       opacity: 0;
       transform: scale(0.5);

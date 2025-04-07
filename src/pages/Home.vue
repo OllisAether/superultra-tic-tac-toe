@@ -7,19 +7,14 @@
       <span>TIC TAC TOE</span>
     </h2>
     <div class="buttons">
-      <!-- <Textbox
-        placeholder="Enter your name" 
-        v-model="name"
-        :error="nameError"
-      /> -->
-
       <div class="spacer"></div>
-      
+
       <Textbox
         class="code"
         placeholder="Enter game code"
         v-model="code"
         uppercase
+        :error="error"
       />
       <Btn @click="joinGame">Join Game</Btn>
 
@@ -28,8 +23,8 @@
       <Btn @click="onlineGame.createRoom()">Create Game</Btn>
 
       <div class="divider"></div>
-      <Btn to="/offline">
-        Offline Game
+      <Btn to="/local" @click="newLocalGame">
+        Local Game
       </Btn>
     </div>
   </div>
@@ -37,28 +32,40 @@
 
 <script setup lang="ts">
 import Btn from '../components/Btn.vue';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import Textbox from '../components/Textbox.vue';
-import { useOnline } from '../store/online';
+import { useOnlineGame } from '@/store/onlineGame';
 
-const onlineGame = useOnline();
-
-// const name = ref<string>('')
 const code = ref<string>('')
+const onlineGame = useOnlineGame();
 
-// const nameError = computed(() => {
-//   if (name.value.length === 0) return
+function newLocalGame () {
+  localStorage.removeItem('game')
+}
 
-//   if (name.value.trim().length < 3) {
-//     return 'Name must be at least 3 characters long'
-//   }
-//   return ''
-// })
+onMounted(() => {
+  if (onlineGame.game) {
+    onlineGame.disconnect()
+  }
+})
 
+const error = ref<string | null>(null)
 function joinGame () {
-  // if (nameError.value) return
+  if (code.value.length !== 6) {
+    error.value = 'Game code must be 6 characters long'
+    return
+  }
 
-  onlineGame.joinRoom('', code.value)
+  if (!/^[A-Z0-9]{6}$/.test(code.value)) {
+    error.value = 'Game code must be alphanumeric'
+    return
+  }
+
+  if (onlineGame.game) {
+    onlineGame.disconnect()
+  }
+
+  onlineGame.connectToRoom(code.value)
 }
 </script>
 

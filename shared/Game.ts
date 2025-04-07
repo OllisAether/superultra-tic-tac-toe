@@ -1,32 +1,24 @@
-import { GlobalBoard, createGlobalBoard } from "./TicTacToe";
+import { type GlobalBoard, createGlobalBoard } from './TicTacToe'
 
 export class Game {
-  private board: GlobalBoard = createGlobalBoard()
-  private currentPlayer: 'x' | 'o' = 'x'
-  private activeBoards: number[] = Array(9).fill(0).map((_, i) => i)
-
-  getBoard() {
-    return this.board
-  }
-
-  getActiveBoards() {
-    return this.activeBoards
-  }
-
-  getCurrentPlayer() {
-    return this.currentPlayer
-  }
-
-  constructor() {
+  constructor(
+    public board: GlobalBoard = createGlobalBoard(),
+    public currentPlayer: 'x' | 'o' = 'x',
+    public activeBoards: number[] = Array(9).fill(0).map((_, i) => i),
+    public winner: 'x' | 'o' | 'draw' | null = null
+  ) {
     this.nextTurn()
   }
-
 
   nextTurnListeners: ((board: GlobalBoard, player: 'x' | 'o', activeBoards: number[]) => void)[] = []
   onNextTurn(callback: (board: GlobalBoard, player: 'x' | 'o', activeBoards: number[]) => void) {
     this.nextTurnListeners.push(callback)
   }
-  private nextTurn() {
+
+  /**
+   * Notifies all listeners about the next turn.
+   */
+  nextTurn() {
     this.nextTurnListeners.forEach(listener => listener(
       this.board.map(board => ({
         fields: [...board.fields],
@@ -37,20 +29,18 @@ export class Game {
     ))
   }
 
-  won: boolean = false
   winListeners: ((winner: 'x' | 'o' | 'draw' | null) => void)[] = []
   onWin(callback: (winner: 'x' | 'o' | 'draw' | null) => void) {
     this.winListeners.push(callback)
   }
-  private win(winner: 'x' | 'o' | 'draw') {
-    if (this.won) return
-    this.won = true
+  win(winner: 'x' | 'o' | 'draw') {
+    this.winner = winner
     this.winListeners.forEach(listener => listener(winner))
   }
 
   takeTurn(boardIndex: number, fieldIndex: number) {
     if (
-      this.won ||
+      this.winner ||
       this.board[boardIndex].fields[fieldIndex] ||
       !this.activeBoards.includes(boardIndex)
     ) return false
@@ -105,5 +95,6 @@ export class Game {
 
   destroy() {
     this.nextTurnListeners = []
+    this.winListeners = []
   }
 }

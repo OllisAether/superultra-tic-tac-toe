@@ -3,7 +3,7 @@
     :menuItems="[
       {
         title: 'New Game',
-        click: startNewGame,
+        click: () => startGame(true),
       },
       {
         title: 'Quit',
@@ -13,17 +13,17 @@
       },
     ]"
     :winner="winner"
-    @restart="startNewGame"
+    @restart="startGame(true)"
   >
     <template #title>
-      <span>Offline Game</span>
+      <span>Local Game</span>
     </template>
 
     <template #info>
-      <div class="offline__current-player">
+      <div class="local__current-player">
         <span>Current player:</span>
-        <XIcon class="offline__current-player__icon" v-if="currentPlayer === 'x'" />
-        <OIcon class="offline__current-player__icon" v-else />
+        <XIcon class="local__current-player__icon" v-if="currentPlayer === 'x'" />
+        <OIcon class="local__current-player__icon" v-else />
       </div>
     </template>
 
@@ -41,11 +41,11 @@
 import GlobalBoardComponent from '../components/GlobalBoard.vue'
 import OIcon from '../components/OIcon.vue'
 import XIcon from '../components/XIcon.vue'
-import { Game } from '../server/models/Game'
+import { Game } from '../../shared/Game'
 import { ref, onBeforeUnmount } from 'vue'
 import GameLayout from '../components/GameLayout.vue'
-import { GlobalBoard } from '../server/models/TicTacToe'
 import router from '../router'
+import type { GlobalBoard } from '../../shared/TicTacToe'
 
 let game: Game
 
@@ -54,25 +54,53 @@ const currentPlayer = ref<'x' | 'o'>()
 const activeBoards = ref<number[]>()
 const winner = ref<'x' | 'o' | 'draw' | null>(null)
 
-startNewGame()
-function startNewGame () {
+startGame()
+function startGame (reset = false) {
+  if (reset) {
+    localStorage.removeItem('game')
+  }
   if (game) game.destroy()
 
-  game = new Game()
+  const savedGame = localStorage.getItem('game')
+  if (savedGame) {
+    const parsedGame = JSON.parse(savedGame)
+    game = new Game(
+      parsedGame.board,
+      parsedGame.currentPlayer,
+      parsedGame.activeBoards,
+      parsedGame.winner,
+    )
+  } else {
+    game = new Game()
+  }
 
-  board.value = game.getBoard()
-  currentPlayer.value = game.getCurrentPlayer()
-  activeBoards.value = game.getActiveBoards()
-  winner.value = null
+  function saveGame () {
+    localStorage.setItem('game', JSON.stringify({
+      board: game.board,
+      currentPlayer: game.currentPlayer,
+      activeBoards: game.activeBoards,
+      winner: game.winner,
+    }))
+  }
+  saveGame()
+
+  board.value = game.board
+  currentPlayer.value = game.currentPlayer
+  activeBoards.value = game.activeBoards
+  winner.value = game.winner
 
   game.onNextTurn((_board, _currentPlayer, _activeBoards) => {
     board.value = _board
     currentPlayer.value = _currentPlayer
     activeBoards.value = _activeBoards
+
+    saveGame()
   })
 
   game.onWin((_winner) => {
     winner.value = _winner
+
+    saveGame()
   })
 }
 
@@ -88,7 +116,7 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped lang="scss">
-.offline {
+.local {
   &__current-player {
     display: flex;
     align-items: center;

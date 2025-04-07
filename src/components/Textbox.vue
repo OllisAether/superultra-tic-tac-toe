@@ -2,6 +2,7 @@
   <input
     @input="input"
     class="textbox"
+    v-bind="$attrs"
     :class="{
       'textbox--error': error
     }"
@@ -18,7 +19,7 @@
 const props = defineProps<{
   modelValue: string
   placeholder?: string
-  error?: string
+  error?: string | null
   uppercase?: boolean
 }>()
 
@@ -26,7 +27,7 @@ const emit = defineEmits<{
   'update:modelValue': [string]
 }>()
 
-function input (event: InputEvent) {
+function input (event: Event) {
   const value = (event.target as HTMLInputElement).value
 
   if (props.uppercase) {
