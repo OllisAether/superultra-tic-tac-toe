@@ -1,6 +1,5 @@
 import { DurableObject } from "cloudflare:workers"
 import { Env } from "../worker-configuration"
-import { Hono } from "hono"
 import { Game } from "../shared/Game"
 import { GlobalBoard } from "../shared/TicTacToe"
 
