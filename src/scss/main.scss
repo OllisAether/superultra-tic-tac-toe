@@ -15,3 +15,13 @@ body, html, #app {
   padding: 0;
   box-sizing: border-box;
 }
+
+p {
+  margin-bottom: 1rem;
+}
+
+.v-overlay__scrim {
+  background: rgba(0, 0, 0, 0.5) !important;
+  opacity: 1 !important;
+  backdrop-filter: blur(10px) !important;
+}

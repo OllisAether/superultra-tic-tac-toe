@@ -10,8 +10,10 @@
     :value="modelValue"
   />
 
-  <div class="error" v-if="error">
-    {{ error }}
+  <div class="error-wrapper" v-if="error">
+    <div class="error">
+      {{ error }}
+    </div>
   </div>
 </template>
 
@@ -65,8 +67,18 @@ function input (event: Event) {
 }
 
 .error {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
   color: #f88;
   font-size: 0.75em;
   margin-top: 0.25em;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.error-wrapper {
+  position: relative;
+  height: 1.5em;
 }
 </style>

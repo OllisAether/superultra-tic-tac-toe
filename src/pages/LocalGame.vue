@@ -3,12 +3,16 @@
     :menuItems="[
       {
         title: 'New Game',
-        click: () => startGame(true),
+        click: () => {
+          showNewGameDialog = true
+          showCloseDialog = false
+        },
       },
       {
         title: 'Quit',
         click: () => {
-          router.push('/')
+          showCloseDialog = true
+          showNewGameDialog = false
         },
       },
     ]"
@@ -34,6 +38,52 @@
       :currentPlayer="currentPlayer"
       @takeTurn="takeTurn"
     />
+
+    <VDialog
+      v-model="showCloseDialog"
+      max-width="400"
+    >
+      <VCard
+        :title="'Quit to main menu?'"
+        :text="'Are you sure you want to quit? Your progress will be lost.'"
+      >
+        <VCardActions>
+          <VBtn
+            @click="showCloseDialog = false"
+          >
+            <XIcon width="1.5rem" style="margin-right: .5rem;" /> Cancel
+          </VBtn>
+          <VBtn
+            @click="router.push('/')"
+          >
+            <OIcon width="1.5rem" style="margin-right: .5rem;" /> Quit
+          </VBtn>
+        </VCardActions>
+      </VCard>
+    </VDialog>
+
+    <VDialog
+      v-model="showNewGameDialog"
+      max-width="400"
+    >
+      <VCard
+        :title="'New Game?'"
+        :text="'Are you sure you want to start a new game? Your progress will be lost.'"
+      >
+        <VCardActions>
+          <VBtn
+            @click="showNewGameDialog = false"
+          >
+            <XIcon width="1.5rem" style="margin-right: .5rem;" /> Cancel
+          </VBtn>
+          <VBtn
+            @click="startGame(true)"
+          >
+            <OIcon width="1.5rem" style="margin-right: .5rem;" /> New Game
+          </VBtn>
+        </VCardActions>
+      </VCard>
+    </VDialog>
   </GameLayout>
 </template>
 
@@ -49,6 +99,9 @@ import type { GlobalBoard } from '../../shared/TicTacToe'
 
 let game: Game
 
+const showCloseDialog = ref(false)
+const showNewGameDialog = ref(false)
+
 const board = ref<GlobalBoard>()
 const currentPlayer = ref<'x' | 'o'>()
 const activeBoards = ref<number[]>()
@@ -56,6 +109,7 @@ const winner = ref<'x' | 'o' | 'draw' | null>(null)
 
 startGame()
 function startGame (reset = false) {
+  showNewGameDialog.value = false
   if (reset) {
     localStorage.removeItem('game')
   }

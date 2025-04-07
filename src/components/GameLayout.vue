@@ -32,6 +32,23 @@
         <MenuIcon class="game-layout__info__menu-button__menu-icon game-layout__info__menu-button__icon" />
         <ChevronIcon class="game-layout__info__menu-button__chevron-icon game-layout__info__menu-button__icon" />
       </button>
+
+      <button class="game-layout__info__menu-button game-layout__info__menu-button--help">
+        ?
+
+        <VDialog
+          activator="parent"
+          width="700"
+        >
+          <template #default="{ isActive }">
+            <TutorialCard>
+              <VBtn @click="isActive.value = false">
+                <OIcon width="1.5rem" style="margin-right: .5rem;" /> Got it!
+              </VBtn>
+            </TutorialCard>
+          </template>
+        </VDialog>
+      </button>
     </div>
     <div class="game-layout__board">
       <div :class="['game-layout__board__content', {
@@ -44,11 +61,11 @@
       <transition name="game-layout__win-overlay">
         <div v-if="winner" class="game-layout__win-overlay">
           <template v-if="winner === 'x'">
-            <XIcon :width="1" class="game-layout__win-overlay__player" />
+            <XIcon :stroke="1" class="game-layout__win-overlay__player" />
             <span>is the winner!</span>
           </template>
           <template v-else-if="winner === 'o'">
-            <OIcon :width="1" class="game-layout__win-overlay__player" />
+            <OIcon :stroke="1" class="game-layout__win-overlay__player" />
             <span>is the winner!</span>
           </template>
           <template v-else-if="winner === 'draw'">
@@ -72,10 +89,10 @@
             You are
           </div>
           <template v-if="player === 'x'">
-            <XIcon :width="1" class="game-layout__player-overlay__player" />
+            <XIcon :stroke="1" class="game-layout__player-overlay__player" />
           </template>
           <template v-else-if="player === 'o'">
-            <OIcon :width="1" class="game-layout__player-overlay__player" />
+            <OIcon :stroke="1" class="game-layout__player-overlay__player" />
           </template>
         </div>
       </transition>
@@ -88,6 +105,7 @@ import Btn from './Btn.vue';
 import ChevronIcon from './ChevronIcon.vue';
 import MenuIcon from './MenuIcon.vue';
 import OIcon from './OIcon.vue';
+import TutorialCard from './TutorialCard.vue';
 import XIcon from './XIcon.vue';
 import { ref } from 'vue';
 
@@ -236,7 +254,7 @@ defineExpose({
 
     &__menu-button {
       flex: 0 0 auto;
-      margin: 0 1rem 0 0;
+      margin: 0 .5rem 0 0;
       position: relative;
       appearance: none;
       font: inherit;
@@ -247,7 +265,6 @@ defineExpose({
       height: 3rem;
       background: #fff1;
       border: .125rem solid #fff0;
-      box-shadow: 0 0 1rem #0002;
       overflow: hidden;
 
       transition: background-color .15s, border-color .15s .1s;
@@ -262,6 +279,11 @@ defineExpose({
           width: 1rem;
           height: 1rem;
         }
+      }
+
+      &--help {
+        margin: 0 1rem 0 0;
+        font-size: 1.5rem;
       }
 
       &:hover {

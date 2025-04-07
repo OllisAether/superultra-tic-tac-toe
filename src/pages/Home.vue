@@ -7,8 +7,23 @@
       <span>TIC TAC TOE</span>
     </h2>
     <div class="buttons">
-      <div class="spacer"></div>
+      <Btn>
+        How to play
 
+        <VDialog
+          activator="parent"
+          width="700"
+        >
+          <template #default="{ isActive }">
+            <TutorialCard>
+              <VBtn @click="isActive.value = false">
+                <OIcon width="1.5rem" style="margin-right: .5rem;" /> Got it!
+              </VBtn>
+            </TutorialCard>
+          </template>
+        </VDialog>
+      </Btn>
+      <div class="divider"></div>
       <Textbox
         class="code"
         placeholder="Enter game code"
@@ -35,6 +50,8 @@ import Btn from '../components/Btn.vue';
 import { onMounted, ref } from 'vue';
 import Textbox from '../components/Textbox.vue';
 import { useOnlineGame } from '@/store/onlineGame';
+import TutorialCard from '@/components/TutorialCard.vue';
+import OIcon from '@/components/OIcon.vue';
 
 const code = ref<string>('')
 const onlineGame = useOnlineGame();
@@ -66,6 +83,11 @@ function joinGame () {
   }
 
   onlineGame.connectToRoom(code.value)
+    .then(() => {
+      error.value = null
+    }).catch(() => {
+      error.value = 'Room not found'
+    })
 }
 </script>
 
@@ -105,13 +127,15 @@ h2 {
   justify-content: center;
   gap: .75rem;
   font-size: 1.5rem;
-  max-width: 30rem;
+  max-width: fit-content;
+  width: 100%;
   margin: 2rem auto 0;
   padding: 0 1rem;
 }
 
 .divider {
   height: .125rem;
+  margin: 1rem 0;
   background: #fff2;
 }
 

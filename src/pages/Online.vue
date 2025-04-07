@@ -4,7 +4,9 @@
     :menuItems="[
       {
         title: 'Leave Game',
-        click: leaveRoom,
+        click: () => {
+          leaveDialog = true
+        }
       }
     ]"
     :winner="onlineGame.game?.winner ?? null"
@@ -46,6 +48,29 @@
       :currentPlayer="onlineGame.game?.currentPlayer ?? 'x'"
       @takeTurn="takeTurn"
     />
+
+    <VDialog
+      v-model="leaveDialog"
+      max-width="400"
+    >
+      <VCard
+        :title="'Leave game?'"
+        :text="'You can rejoin using the same room code as long as your opponent is still in the game.'"
+      >
+        <VCardActions>
+          <VBtn
+            @click="leaveDialog = false"
+          >
+            <XIcon width="1.5rem" style="margin-right: .5rem;" /> Cancel
+          </VBtn>
+          <VBtn
+            @click="leaveRoom"
+          >
+            <OIcon width="1.5rem" style="margin-right: .5rem;" /> Leave
+          </VBtn>
+        </VCardActions>
+      </VCard>
+    </VDialog>
   </GameLayout>
 </template>
 
@@ -61,7 +86,8 @@ import { onMounted, ref, toRef, watch } from 'vue';
 
 const onlineGame = useOnlineGame();
 const route = useRoute();
-const router = useRouter();
+
+const leaveDialog = ref(false);
 
 const gameLayout = ref<InstanceType<typeof GameLayout> | null>(null);
 

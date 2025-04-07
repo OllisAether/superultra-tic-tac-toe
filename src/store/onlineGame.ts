@@ -21,25 +21,45 @@ export const useOnlineGame = defineStore("onlineGame", () => {
 
   const loading = ref(false)
   function connectToRoom(roomId: string) {
-    if (ws.value) {
-      ws.value.close()
-      ws.value = null
-    }
-
-    const url = (import.meta.env.VITE_API_URL?.replace('http', 'ws') ?? '') + '/api/room/' + roomId
-
-    loading.value = true
-    ws.value = new WebSocket(url)
-
-    const off = watch(game, (game) => {
-      if (game?.roomId) {
-        loading.value = false
-        router.push({ name: 'room', params: { room: game.roomId } })
-        off()
+    return new Promise<void>((resolve, reject) => {
+      if (ws.value) {
+        ws.value.close()
+        ws.value = null
       }
-    }, { immediate: true })
 
-    handleWs()
+      const url = (import.meta.env.VITE_API_URL?.replace('http', 'ws') ?? '') + '/api/room/' + roomId
+
+      loading.value = true
+      ws.value = new WebSocket(url)
+
+      const off = watch(game, (game) => {
+        if (game?.roomId) {
+          loading.value = false
+          router.push({ name: 'room', params: { room: game.roomId } })
+          off()
+        }
+      }, { immediate: true })
+
+      handleWs()
+
+      function res () {
+        resolve()
+        ws.value?.removeEventListener('open', res)
+        ws.value?.removeEventListener('close', rej)
+        ws.value?.removeEventListener('error', rej)
+      }
+
+      function rej () {
+        reject()
+        ws.value?.removeEventListener('open', res)
+        ws.value?.removeEventListener('close', rej)
+        ws.value?.removeEventListener('error', rej)
+      }
+
+      ws.value.addEventListener('open', res)
+      ws.value.addEventListener('close', rej)
+      ws.value.addEventListener('error', rej)
+    })
   }
 
   function rematch() {
@@ -53,6 +73,7 @@ export const useOnlineGame = defineStore("onlineGame", () => {
       ws.value.close()
       ws.value = null
     }
+
     loading.value = true
     ws.value = new WebSocket((import.meta.env.VITE_API_URL?.replace('http', 'ws') ?? '') + '/api/create')
 

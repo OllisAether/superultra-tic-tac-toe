@@ -5,7 +5,7 @@
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 16 16"
     fill="none"
-    :stroke-width="width"
+    :stroke-width="stroke"
     stroke-linecap="round"
     stroke-linejoin="round"
   >
@@ -15,9 +15,9 @@
 
 <script setup lang="ts">
 withDefaults(defineProps<{
-  width?: number
+  stroke?: number
 }>(), {
-  width: 1.5
+  stroke: 1.5
 })
 </script>
 

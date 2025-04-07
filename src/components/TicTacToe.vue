@@ -23,12 +23,12 @@
         <XIcon
           v-if="board.winner === 'x'"
           class="tictactoe-board__winner-icon"
-          :width="0.7"
+          :stroke="0.7"
         />
         <OIcon
           v-if="board.winner === 'o'"
           class="tictactoe-board__winner-icon"
-          :width="0.7"
+          :stroke="0.7"
         />
       </div>
     </transition>
