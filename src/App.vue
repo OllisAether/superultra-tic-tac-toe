@@ -1,9 +1,9 @@
 <template>
-  <VApp>
+  <!-- <VApp>
     <VMain>
-      <VContainer>
-        <RouterView />
-      </VContainer>
+      <VContainer> -->
+  <RouterView />
+      <!-- </VContainer>
     </VMain>
-  </VApp>
+  </VApp> -->
 </template>
