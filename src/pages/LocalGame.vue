@@ -19,9 +19,7 @@
     :winner="winner"
     @restart="startGame(true)"
   >
-    <template #title>
-      <span>Local Game</span>
-    </template>
+    <template #title>Local Game</template>
 
     <template #info>
       <div class="local__current-player">

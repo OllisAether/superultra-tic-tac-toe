@@ -21,6 +21,7 @@
 	"devDependencies": {
 		"@cloudflare/vite-plugin": "^1.0.0",
 		"@cloudflare/workers-types": "^4.20250404.0",
+		"@mdi/font": "^7.4.47",
 		"@tsconfig/node22": "^22.0.0",
 		"@types/node": "^22.13.9",
 		"@vitejs/plugin-vue": "^5.2.1",

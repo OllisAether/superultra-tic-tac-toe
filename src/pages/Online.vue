@@ -18,6 +18,13 @@
     <template #title>
       <template v-if="onlineGame.game?.opponentLeft">
         Code: {{ onlineGame.game?.roomId }}
+
+        <button class="copy-code" aria-label="Copy room code" @click="copyRoomCode">
+          <VIcon v-if="copyCodeSuccess">
+            mdi-check-circle-outline
+          </VIcon>
+          <VIcon v-else>mdi-clipboard-multiple-outline</VIcon>
+        </button>
       </template>
       <template v-else>
         <XIcon v-if="onlineGame.game?.player === 'x'" />
@@ -118,6 +125,17 @@ function leaveRoom () {
   onlineGame.disconnect()
 }
 
+const copyCodeSuccess = ref(false);
+function copyRoomCode () {
+  navigator.clipboard.writeText(onlineGame.game?.roomId ?? '')
+    .then(() => {
+      copyCodeSuccess.value = true;
+      setTimeout(() => {
+        copyCodeSuccess.value = false;
+      }, 1000);
+    })
+}
+
 const infoAlert = ref(false);
 function triggerAlert () {
   if (!infoAlert.value) {
@@ -152,31 +170,46 @@ function takeTurn (boardIndex: number, fieldIndex: number) {
   animation: wiggle 1s linear forwards;
 
   @keyframes wiggle {
-	0%,
-	100% {
-		transform: translateX(0);
-	}
+    0%,
+    100% {
+      transform: translateX(0);
+    }
 
-	10%,
-	30%,
-	50%,
-	70% {
-		transform: translateX(-5px);
-	}
+    10%,
+    30%,
+    50%,
+    70% {
+      transform: translateX(-5px);
+    }
 
-	20%,
-	40%,
-	60% {
-		transform: translateX(5px);
-	}
+    20%,
+    40%,
+    60% {
+      transform: translateX(5px);
+    }
 
-	80% {
-		transform: translateX(4px);
-	}
+    80% {
+      transform: translateX(4px);
+    }
 
-	90% {
-		transform: translateX(-4px);
-	}
+    90% {
+      transform: translateX(-4px);
+    }
+  }
 }
+
+.copy-code {
+  margin-left: 1rem;
+  display: inline-block;
+  font-size: 1rem;
+  width: 2rem;
+  height: 3rem;
+  vertical-align: bottom;
+
+  color: #fff8;
+
+  &:hover {
+    color: #fff;
+  }
 }
 </style>

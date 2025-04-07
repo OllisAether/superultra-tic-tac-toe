@@ -1,9 +1,11 @@
 <template>
-  <div :class="['tictactoe-board', {
-    active: active,
-    x: currentPlayer === 'x',
-    o: currentPlayer === 'o'
-  }]">
+  <div
+    :class="['tictactoe-board', {
+      active: active,
+      x: currentPlayer === 'x',
+      o: currentPlayer === 'o'
+    }]"
+  >
     <button
       :class="['tictactoe-board__field', {
         'tictactoe-board__field--taken': board.fields[i]
@@ -36,6 +38,7 @@
 </template>
 
 <script setup lang="ts">
+import { onBeforeUnmount, onMounted, ref } from 'vue';
 import { type Board } from '../../shared/TicTacToe'
 import OIcon from './OIcon.vue';
 import XIcon from './XIcon.vue';
@@ -52,10 +55,10 @@ const emit = defineEmits<{
 </script>
 
 <style scoped lang="scss">
-  @function unit ($value) {
-    @return min(1vw * $value, 1vh * $value);
-  }
-  
+@function unit ($value) {
+  @return min(1vw * $value, 1vh * $value);
+}
+
 .tictactoe-board {
   display: grid;
   grid-template-columns: repeat(3, 1fr);

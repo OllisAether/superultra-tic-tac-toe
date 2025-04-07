@@ -39,6 +39,7 @@
         <VDialog
           activator="parent"
           width="700"
+          scrollable
         >
           <template #default="{ isActive }">
             <TutorialCard>
@@ -271,7 +272,7 @@ defineExpose({
       @media screen and (max-width: 768px) {
         position: absolute;
         top: .5rem;
-        right: -.5rem;
+        right: 2.5rem;
         width: 2rem;
         height: 2rem;
 
@@ -284,6 +285,11 @@ defineExpose({
       &--help {
         margin: 0 1rem 0 0;
         font-size: 1.5rem;
+
+        @media screen and (max-width: 768px) {
+          font-size: 1rem;
+          right: -.5rem;
+        }
       }
 
       &:hover {

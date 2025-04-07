@@ -13,6 +13,7 @@
         <VDialog
           activator="parent"
           width="700"
+          scrollable
         >
           <template #default="{ isActive }">
             <TutorialCard>
@@ -98,6 +99,7 @@ function joinGame () {
   justify-content: center;
   align-items: center;
   height: 100vh;
+  height: 100svh;
 }
 
 h2 {
