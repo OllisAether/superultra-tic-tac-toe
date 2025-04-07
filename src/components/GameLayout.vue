@@ -6,9 +6,9 @@
       </h2>
 
       <div class="game-layout__info__scroller">
-        <slot name="info" />
-
-      <div class="game-layout__info__spacer"></div>
+        <div class="game-layout__info__scroller__content">
+          <slot name="info" />
+        </div>
 
         <transition name="game-layout__info__menu">
           <div v-if="menuOpen"class="game-layout__info__menu">
@@ -179,6 +179,11 @@ defineExpose({
     border-radius: 1rem;
     overflow: hidden;
 
+    @media screen and (max-height: 1024px){
+      height: fit-content;
+      flex-flow: row wrap;
+      font-size: .8rem;
+    }
     @media screen and (max-width: 768px){
       height: fit-content;
       flex-flow: row wrap;
@@ -200,7 +205,13 @@ defineExpose({
         height: 1.2em;
       }
 
-      @media (max-width: 768px) {
+      @media screen and (max-height: 1024px) {
+        width: 100%;
+        font-size: 1rem;
+        padding: 0 .5rem 0 .5rem;
+        margin: 1rem 0 1rem .5rem;
+      }
+      @media screen and (max-width: 768px) {
         width: 100%;
         font-size: 1rem;
         padding: 0 .5rem 0 .5rem;
@@ -221,6 +232,13 @@ defineExpose({
       white-space: nowrap;
       scrollbar-width: none;
 
+      @media screen and (max-height: 1024px) {
+        padding: 0 1rem 1rem;
+        flex-flow: row wrap;
+        gap: .5rem;
+        overflow: visible;
+      }
+
       @media screen and (max-width: 768px) {
         padding: 0 1rem 1rem;
         flex-flow: row wrap;
@@ -231,10 +249,15 @@ defineExpose({
       &::-webkit-scrollbar {
         display: none;
       }
-    }
 
-    &__spacer {
-      flex: 1 1 auto;
+      &__content {
+        flex: 1 1 auto;
+        // width: 0;
+        // overflow: hidden;
+        display: flex;
+        flex-flow: row nowrap;
+        align-items: center;
+      }
     }
 
     &__menu {
@@ -269,6 +292,18 @@ defineExpose({
       overflow: hidden;
 
       transition: background-color .15s, border-color .15s .1s;
+      @media screen and (max-height: 1024px) {
+        position: absolute;
+        top: .5rem;
+        right: 2.5rem;
+        width: 2rem;
+        height: 2rem;
+
+        .game-layout__info__menu-button__icon {
+          width: 1rem;
+          height: 1rem;
+        }
+      }
       @media screen and (max-width: 768px) {
         position: absolute;
         top: .5rem;
@@ -286,6 +321,10 @@ defineExpose({
         margin: 0 1rem 0 0;
         font-size: 1.5rem;
 
+        @media screen and (max-height: 1024px) {
+          font-size: 1rem;
+          right: -.5rem;
+        }
         @media screen and (max-width: 768px) {
           font-size: 1rem;
           right: -.5rem;
