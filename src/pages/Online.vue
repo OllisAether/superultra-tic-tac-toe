@@ -199,14 +199,18 @@ function takeTurn (boardIndex: number, fieldIndex: number) {
 }
 
 .copy-code {
-  margin-left: 1rem;
-  display: inline-block;
-  font-size: 1rem;
-  width: 2rem;
-  height: 3rem;
-  vertical-align: bottom;
+  margin-left: .2rem;
+  display: inline-flex;
+  width: 1em;
+  height: 1.6em;
+  justify-content: center;
+  align-items: center;
 
   color: #fff8;
+
+  & > * {
+    font-size: .8em;
+  }
 
   &:hover {
     color: #fff;

@@ -227,10 +227,6 @@ defineExpose({
       align-self: stretch;
       width: 0;
       padding: 0 1rem;
-      overflow: auto;
-
-      white-space: nowrap;
-      scrollbar-width: none;
 
       @media screen and (max-height: 1024px) {
         padding: 0 1rem 1rem;
@@ -252,11 +248,13 @@ defineExpose({
 
       &__content {
         flex: 1 1 auto;
-        // width: 0;
-        // overflow: hidden;
+        width: 0;
+        height: 100%;
+        overflow: hidden;
         display: flex;
         flex-flow: row nowrap;
         align-items: center;
+        line-height: 1;
       }
     }
 
