@@ -1,0 +1,6 @@
+# Allow all web crawlers to access everything
+User-agent: *
+Disallow:
+
+# Sitemap location
+Sitemap: https://superultra-tictactoe.ollisaether.art/sitemap.xml

@@ -1,23 +1,21 @@
-import { defineConfig } from 'vite';
-import vue from '@vitejs/plugin-vue';
-import { VitePWA } from 'vite-plugin-pwa';
+import { fileURLToPath, URL } from 'node:url'
 
-// https://vitejs.dev/config/
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
+import vueDevTools from 'vite-plugin-vue-devtools'
+
+import { cloudflare } from "@cloudflare/vite-plugin"
+
+// https://vite.dev/config/
 export default defineConfig({
   plugins: [
     vue(),
-    VitePWA({
-      registerType: 'autoUpdate',
-      manifest: {
-        name: 'Superultra TicTacToe',
-        theme_color: '#000000',
-      },
-    }),
+    vueDevTools(),
+    cloudflare()
   ],
-  server: {
-    port: 8080
+  resolve: {
+    alias: {
+      '@': fileURLToPath(new URL('./src', import.meta.url))
+    },
   },
-  build: {
-    outDir: 'dist/client'
-  }
-});
+})
